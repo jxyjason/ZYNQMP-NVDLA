@@ -1,0 +1,38 @@
+import socket
+import struct
+from IPython.display import display, clear_output
+
+
+if __name__ == '__main__':
+    while True:
+        try:
+            # 创建 TCP 服务器套接字
+            server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            # 绑定 IP 地址和端口号
+            server_address = ('', 8877)
+            server_socket.bind(server_address)
+
+            # 监听连接
+            server_socket.listen(1)
+            print("Listening for incoming connections...")
+
+            # 接受连接
+            client_socket, client_address = server_socket.accept()
+            print("Accepted connection from:", client_address)
+
+           # 接收整数数据
+            received_data = client_socket.recv(4)
+
+            # 将数据从网络字节序转换为主机字节序
+            host_number = struct.unpack('!i', received_data)[0]
+            
+            print("Received data:", host_number)
+
+            # 关闭套接字
+            client_socket.close()
+            server_socket.close()
+        except Exception as e:
+            client_socket.close()
+            server_socket.close()
+            continue

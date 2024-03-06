@@ -1,0 +1,49 @@
+# 连续发送图片
+
+import cv2
+import numpy as np
+import socket
+from PIL import Image
+from IPython.display import display, clear_output
+
+# 获得一帧图像
+from jetbot import Camera
+camera = Camera.instance(width=224, height=224)
+
+# 循环发送图片
+temp_file = "/home/jetbot/Notebook/temp_image.jpg"
+# 定义目标IP地址和端口号
+target_ip = "10.10.10.56"
+target_port = 8877
+
+while True:
+    try:
+        from PIL import Image
+        # 读取BGR图像
+        frame = camera.value
+        # 将BGR图像转换为RGB格式
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # 创建一个图像对象
+        image = Image.fromarray(rgb_frame)
+        # 在Jupyter Notebook中显示图像
+        clear_output(wait=True)
+        display(image)
+
+        image.save(temp_file)
+
+        # 创建一个TCP套接字
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # 建立与目标主机的连接
+        sock.connect((target_ip, target_port))
+
+        # 读取临时文件的数据
+        with open(temp_file, "rb") as f:
+            image_data = f.read()
+
+        # 发送图像数据
+        sock.sendall(image_data)
+        # 关闭套接字
+        sock.close()
+    except Exception as e:
+        sock.close()
+        continue
