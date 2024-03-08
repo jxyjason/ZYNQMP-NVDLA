@@ -1094,3 +1094,4 @@ void print_topk_and_send(float* data, int total_num, int topk, const char* serve
 
     free(cls_scores);
 }
+

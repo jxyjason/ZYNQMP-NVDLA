@@ -5,6 +5,7 @@ import numpy as np
 import socket
 from PIL import Image
 from IPython.display import display, clear_output
+import time
 
 # 获得一帧图像
 from jetbot import Camera
@@ -13,7 +14,7 @@ camera = Camera.instance(width=224, height=224)
 # 循环发送图片
 temp_file = "/home/jetbot/Notebook/temp_image.jpg"
 # 定义目标IP地址和端口号
-target_ip = "10.10.10.56"
+target_ip = "10.10.10.62"
 target_port = 8877
 
 while True:
@@ -30,6 +31,8 @@ while True:
         display(image)
 
         image.save(temp_file)
+        
+        time.sleep(0.1)
 
         # 创建一个TCP套接字
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

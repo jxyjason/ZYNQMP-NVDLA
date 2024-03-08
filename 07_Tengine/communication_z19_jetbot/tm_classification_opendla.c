@@ -29,6 +29,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#include <time.h>
+#include <unistd.h>
+
+
 #define MAX_BUFFER_SIZE 1024
 
 #include "common.h"
@@ -228,7 +232,7 @@ int tengine_classify(const char* model_file, const char* image_file, int img_h, 
     for (int i = 0; i < output_size; i++)
         output_data[i] = (float)output_i8[i] * output_scale;
 
-    print_topk_and_send(output_data, output_size, 5,"10.10.10.54",8877);
+    print_topk_and_send(output_data, output_size, 5,"10.10.10.70",8877);
     fprintf(stderr, "--------------------------------------\n");
 
     /* release tengine */
@@ -354,6 +358,9 @@ while(1){
 
     if (tengine_classify(model_file, image_file, img_h, img_w, mean, scale, loop_count, num_thread) < 0)
         return -1;
+
+    image_file = NULL;
 }
     return 0;
 }
+
