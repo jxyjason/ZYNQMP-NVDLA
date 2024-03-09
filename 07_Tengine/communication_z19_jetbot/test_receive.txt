@@ -10,7 +10,7 @@ if __name__ == '__main__':
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
             # 绑定 IP 地址和端口号
-            server_address = ('', 8877)
+            server_address = ('', 9876)
             server_socket.bind(server_address)
 
             # 监听连接
@@ -27,6 +27,7 @@ if __name__ == '__main__':
             # 将数据从网络字节序转换为主机字节序
             host_number = struct.unpack('!i', received_data)[0]
             
+            clear_output(wait=True)
             print("Received data:", host_number)
 
             # 关闭套接字

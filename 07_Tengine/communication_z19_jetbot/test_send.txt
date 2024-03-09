@@ -14,7 +14,7 @@ camera = Camera.instance(width=224, height=224)
 # 循环发送图片
 temp_file = "/home/jetbot/Notebook/temp_image.jpg"
 # 定义目标IP地址和端口号
-target_ip = "10.10.10.62"
+target_ip = "10.10.10.61"
 target_port = 8877
 
 while True:

@@ -180,6 +180,25 @@ int tengine_classify(const char* model_file, const char* image_file, int img_h, 
         return -1;
     }
 
+
+    //开始循环
+    float* output_data ;
+    tensor_t output_tensor;
+
+
+    while(1){
+
+    if (image_file == NULL)
+    {
+//        fprintf(stderr, "Error: Image file not specified!\n");
+//       show_usage();
+//        return -1;
+	receive_image();
+	image_file = "/mnt/sdb3/Tengine-tengine-lite/build/examples/received_image.jpg"; 
+
+   }
+
+
     /* prepare process input data, set the data mem to input tensor */
     float input_scale = 0.f;
     int input_zero_point = 0;
@@ -220,7 +239,7 @@ int tengine_classify(const char* model_file, const char* image_file, int img_h, 
     fprintf(stderr, "--------------------------------------\n");
 
     /* get the result of classification */
-    tensor_t output_tensor = get_graph_output_tensor(graph, 0, 0);
+     output_tensor = get_graph_output_tensor(graph, 0, 0);
     int8_t* output_i8 = (int8_t*)get_tensor_buffer(output_tensor);
     int output_size = get_tensor_buffer_size(output_tensor);
 
@@ -228,12 +247,16 @@ int tengine_classify(const char* model_file, const char* image_file, int img_h, 
     float output_scale = 0.f;
     int output_zero_point = 0;
     get_tensor_quant_param(output_tensor, &output_scale, &output_zero_point, 1);
-    float* output_data = (float*)malloc(output_size * sizeof(float));
+     output_data = (float*)malloc(output_size * sizeof(float));
     for (int i = 0; i < output_size; i++)
         output_data[i] = (float)output_i8[i] * output_scale;
 
-    print_topk_and_send(output_data, output_size, 5,"10.10.10.70",8877);
+    print_topk_and_send(output_data, output_size, 5,"10.10.10.68",9876);
     fprintf(stderr, "--------------------------------------\n");
+
+    image_file = NULL;
+
+    }
 
     /* release tengine */
     free(input_data);
@@ -306,7 +329,7 @@ int main(int argc, char* argv[])
             break;
         }
     }
-while(1){
+// while(1){
     /* check files */
     if (model_file == NULL)
     {
@@ -315,15 +338,15 @@ while(1){
         return -1;
     }
 
-    if (image_file == NULL)
-    {
-//        fprintf(stderr, "Error: Image file not specified!\n");
-//       show_usage();
-//        return -1;
-	receive_image();
-	image_file = "/mnt/sdb3/Tengine-tengine-lite/build/examples/received_image.jpg"; 
+     if (image_file == NULL)
+     {
+// //        fprintf(stderr, "Error: Image file not specified!\n");
+// //       show_usage();
+// //        return -1;
+// 	receive_image();
+ 	image_file = "/mnt/sdb3/Tengine-tengine-lite/build/examples/received_image.jpg"; 
 
-   }
+    }
 
     if (!check_file_exist(model_file) || !check_file_exist(image_file))
         return -1;
@@ -359,8 +382,9 @@ while(1){
     if (tengine_classify(model_file, image_file, img_h, img_w, mean, scale, loop_count, num_thread) < 0)
         return -1;
 
-    image_file = NULL;
-}
+    // image_file = NULL;
+// }
     return 0;
 }
+
 
