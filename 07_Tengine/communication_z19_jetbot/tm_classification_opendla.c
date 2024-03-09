@@ -343,7 +343,7 @@ int main(int argc, char* argv[])
 // //        fprintf(stderr, "Error: Image file not specified!\n");
 // //       show_usage();
 // //        return -1;
-// 	receive_image();
+ 	receive_image();
  	image_file = "/mnt/sdb3/Tengine-tengine-lite/build/examples/received_image.jpg"; 
 
     }

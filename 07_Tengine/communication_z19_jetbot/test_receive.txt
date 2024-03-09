@@ -2,6 +2,18 @@ import socket
 import struct
 from IPython.display import display, clear_output
 
+def printCifar10(host_number):
+    cifar_categories = [
+        'airplane', 'automobile', 'bird', 'cat', 'deer',
+        'dog', 'frog', 'horse', 'ship', 'truck'
+    ]
+    
+    if host_number >= 0 and host_number < len(cifar_categories):
+        category = cifar_categories[host_number]
+        print(f"CIFAR category for host number {host_number}: {category}")
+    else:
+        print(f"Invalid host number: {host_number}")
+
 
 if __name__ == '__main__':
     while True:
@@ -28,7 +40,7 @@ if __name__ == '__main__':
             host_number = struct.unpack('!i', received_data)[0]
             
             clear_output(wait=True)
-            print("Received data:", host_number)
+            printCifar10(host_number)
 
             # 关闭套接字
             client_socket.close()
